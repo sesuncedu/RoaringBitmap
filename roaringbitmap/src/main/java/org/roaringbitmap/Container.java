@@ -336,6 +336,13 @@ public abstract class Container implements Iterable<Short>, Cloneable, Externali
   public abstract int getSizeInBytes();
 
   /**
+   * Calculate a  precise value for the memory usage of this container for a given virtual
+   * machine. This value takes into account object and array
+   * header overhead,
+   */
+  public abstract long getPreciseSizeInBytes(ObjectSizer sizer);
+
+  /**
    * Add all shorts in [begin,end) using an unsigned interpretation. May generate a new container.
    *
    * @param begin start of range (inclusive)

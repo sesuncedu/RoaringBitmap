@@ -442,6 +442,15 @@ public final class ArrayContainer extends Container implements Cloneable {
   }
 
   @Override
+  public long getPreciseSizeInBytes(ObjectSizer sizer) {
+    long tmp = sizer.getObjectHeaderSize();
+    tmp += 4; // cardinality field
+    tmp += sizer.getObjectPointerSize(); // content field
+    tmp += sizer.getArraySize(content);
+    return sizer.getPaddedSize(tmp);
+  }
+
+  @Override
   public int hashCode() {
     int hash = 0;
     for (int k = 0; k < cardinality; ++k) {

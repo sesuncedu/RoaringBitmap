@@ -1066,6 +1066,14 @@ public final class RunContainer extends Container implements Cloneable {
   public int getSizeInBytes() {
     return this.nbrruns * 4 + 4;
   }
+  @Override
+  public long getPreciseSizeInBytes(ObjectSizer sizer) {
+    long tmp = sizer.getObjectHeaderSize();
+    tmp += 4; // nbruns field
+    tmp += sizer.getObjectPointerSize(); // valueslength field
+    tmp += sizer.getArraySize(valueslength);
+    return sizer.getPaddedSize(tmp);
+  }
 
   /**
    * Gets the value of the first element of the run at the index.

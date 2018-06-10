@@ -1655,6 +1655,18 @@ public class RoaringBitmap implements Cloneable, Serializable, Iterable<Integer>
     return (int) getLongSizeInBytes() ;
   }
 
+  /**
+   * Calculate a  precise value for the memory usage of this container for a given virtual
+   * machine. This value takes into account object and array
+   * header overhead,
+   */
+  public  long getPreciseSizeInBytes(ObjectSizer sizer) {
+    long tmp = sizer.getObjectHeaderSize();
+    tmp += sizer.getObjectPointerSize(); // highLowContainer field;
+    tmp += highLowContainer.getPreciseSizeInBytes( sizer);
+    return sizer.getPaddedSize(tmp);
+  }
+
   @Override
   public int hashCode() {
     return highLowContainer.hashCode();

@@ -607,6 +607,26 @@ public final class RoaringArray implements Cloneable, Externalizable {
     return count;
   }
 
+  /**
+   * Report the memory usage of this object
+   */
+  public long getPreciseSizeInBytes(ObjectSizer sizer) {
+    long tmp = sizer.getObjectHeaderSize();
+    tmp += 4; // size field
+    tmp += sizer.getObjectPointerSize(); // keys field;
+    tmp += sizer.getArraySize(keys);
+
+    tmp += sizer.getObjectPointerSize(); // values field
+    tmp += sizer.getArraySize(values);
+
+    for(int k=0;k<size;k++) {
+      tmp += values[k].getPreciseSizeInBytes(sizer);
+    }
+
+    return sizer.getPaddedSize(tmp);
+  }
+
+
   protected void setContainerAtIndex(int i, Container c) {
     this.values[i] = c;
   }

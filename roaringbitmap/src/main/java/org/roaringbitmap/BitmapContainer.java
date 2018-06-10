@@ -518,6 +518,16 @@ public final class BitmapContainer extends Container implements Cloneable {
   }
 
   @Override
+  public long getPreciseSizeInBytes(ObjectSizer sizer) {
+    long tmp = sizer.getObjectHeaderSize();
+    tmp += 4; // cardinality field
+    tmp += sizer.getObjectPointerSize(); // bitmap field
+    tmp += sizer.getArraySize(bitmap);
+    return sizer.getPaddedSize(tmp);
+  }
+
+
+  @Override
   public int hashCode() {
     return Arrays.hashCode(this.bitmap);
   }
